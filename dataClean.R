@@ -44,5 +44,11 @@ salaryPremium <- salaryMedian %>%
 ##UKPRN matched with Degree Classs
 degreeSummary <- select(degreeClass, UKPRN, KISCOURSEID, DEGPOP, 
                         UFIRST, UUPPER, ULOWER, UOTHER, UORDINARY, UNA)
-degreeSummary <- mutate(degreeSummary)
-                                                     
+
+degreeSummary <- degreeSummary %>% 
+  group_by(UKPRN) %>% 
+  summarise(totalFirst = weighted.mean(UFIRST, DEGPOP),
+            totalUpper = weighted.mean(UFIRST + UUPPER, DEGPOP),
+            totalSecond = weighted.mean(UFIRST + UUPPER + ULOWER, DEGPOP))
+
+degreeSummary[,-1] <- round(degreeSummary[,-1])                                                   
