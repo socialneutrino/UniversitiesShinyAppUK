@@ -15,5 +15,22 @@ x_summary <- mutate(x, tariffMean = (T1 * 60 + T120 * 140 + T160 * 180
                                      + T320 * 340 + T360 * 380 + T400 * 420 
                                      + T440 * 460 + T480 * 500 + T520 * 540 
                                      + T560 * 580 + T600 * 620)/100)
+x.location <- left_join(x_summary, courseLocation, by="UKPRN")
 x2 <- filter(x_summary, !is.na(tariffMean))
-x3 <- aggregate(tariffMean ~ UKPRN + NAME, FUN = mean, data=x2)
+x3 <- aggregate(tariffMean ~ UKPRN + NAME + LOCID, FUN = mean, data=x2)
+x.location <- left_join(x3, courseLocation, by="UKPRN")
+
+#Choose most common 
+maxFreq <- function(x){
+  tbl <- table(x$v1)
+  x$freq <- rep(names(tbl)[which.max(tbl)],nrow(x))
+  x
+}
+
+#UKPRN matched with most common LOCID
+x.LOCID <- x.location %>% 
+    count(UKPRN, LOCID) %>%
+    slice(which.max(n))
+
+
+                                                     
