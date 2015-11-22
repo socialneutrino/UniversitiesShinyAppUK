@@ -16,6 +16,6 @@ shinyUI(pageWithSidebar(
 
   # Show a table summarizing the values entered
   mainPanel(
-    tableOutput("values")
+    htmlOutput("view")
   )
 ))
