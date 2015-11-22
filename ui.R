@@ -11,7 +11,7 @@ shinyUI(pageWithSidebar(
     
     # Specification of range within an interval
     sliderInput("range", "Range:",
-                min = 0, max = 600, value = c(200,500))
+                min = 0, max = 600, value = c(100,580))
 ),
 
   # Show a table summarizing the values entered
