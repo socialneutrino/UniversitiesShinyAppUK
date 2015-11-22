@@ -1,15 +1,21 @@
-require(shiny)
+library(shiny)
 
+# Define UI for slider demo application
 shinyUI(pageWithSidebar(
-  headerPanel("Mean Entry UCAS Tariff"),
+  
+  #  Application title
+  headerPanel("Sliders"),
+  
+  # Sidebar with sliders that demonstrate various available options
   sidebarPanel(
-    sliderInput("range", "UCAS Points:", 
-                min=0, max=600, value = c(200,500)
-  ),
+    
+    # Specification of range within an interval
+    sliderInput("range", "Range:",
+                min = 0, max = 600, value = c(200,500))
+),
+
+  # Show a table summarizing the values entered
   mainPanel(
-    h3(textOutput("year")), 
-    htmlOutput("gvis")
+    tableOutput("values")
   )
-)
-)
- 
+))

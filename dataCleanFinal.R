@@ -65,4 +65,6 @@ instStats <- tariffMeans %>%
   inner_join(salaryPremium, by="UKPRN") %>%
   inner_join(degreeSummary, by="UKPRN")
 
+instStats <- mutate(instStats, LatLong = paste(instLatitude, instLongitude, sep=":"))
+
 saveRDS(instStats, file="instStats.rda")
