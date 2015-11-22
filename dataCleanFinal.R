@@ -10,17 +10,17 @@ common <- read.csv("unistats2015/common.csv")
 ukprnLookup <- read.xls("unistats2015/UNISTATS_UKPRN_lookup_20141030.xls", sheet="Lookup")
 KIScourse <- read.csv("unistats2015/KISCOURSE.csv")
 
-##Names of Institutions and Locations
-x <- left_join(ukprnLookup, tariff, by="UKPRN")
-x_summary <- mutate(x, tariffMean = (T1 * 60 + T120 * 140 + T160 * 180 
-                                     + T200 * 220 + T240 * 260 + T280 * 300
-                                     + T320 * 340 + T360 * 380 + T400 * 420 
-                                     + T440 * 460 + T480 * 500 + T520 * 540 
-                                     + T560 * 580 + T600 * 620)/100)
-x2 <- filter(x_summary, !is.na(tariffMean))
-x3 <- aggregate(tariffMean ~ UKPRN + NAME, FUN = mean, data=x2)
+##Names of Institutions and UCAS Entry Tariffs
+tariffMeans <- ukprnLookup %>% 
+  left_join(tariff, by="UKPRN") %>%
+  mutate(tariffMean = (T1 * 60 + T120 * 140 + T160 * 180 
+                       + T200 * 220 + T240 * 260 + T280 * 300
+                       + T320 * 340 + T360 * 380 + T400 * 420 
+                       + T440 * 460 + T480 * 500 + T520 * 540 
+                       + T560 * 580 + T600 * 620)/100) %>%
+  filter(!is.na(tariffMean))
+tariffMeans <- aggregate(tariffMean ~ UKPRN + NAME, FUN = mean, data=tariffMeans)
 x.location <- left_join(x2, courseLocation, by="UKPRN")
-
 
 #Choose most common for group
 maxFreq <- function(x){
@@ -30,23 +30,23 @@ maxFreq <- function(x){
 }
 
 #UKPRN matched with most common LOCID
-x.location <- left_join(x3, courseLocation, by="UKPRN")
-x.LOCID <- x.location %>% 
+x.LOCID <- tariffMeans %>% 
+    left_join(courseLocation, by="UKPRN") %>%
     count(UKPRN, LOCID) %>%
     slice(which.max(n))
 
 #Location information
-x.LOCID <- location %>%
-  select(LATITUDE, LONGITUDE)
-  inner_join(tariffMeans, by="UKPRN") %>%
+instLocations <- location %>%
+  select(UKPRN, LATITUDE, LONGITUDE)  %>%
+  group_by(UKPRN) %>% 
+  summarise(instLatitude = mean(LATITUDE), instLongitude = mean(LONGITUDE))
 
 ##UKPRN matched with Salary Premium
 salaryMedian <- select(salary, UKPRN, KISCOURSEID, SALPOP, MED, INSTMED)
 salaryMedian <- mutate(salaryMedian, instPremium = 100*(INSTMED - MED)/MED)
 salaryPremium <- salaryMedian %>% 
                   group_by(UKPRN) %>% 
-                  summarise(mean = mean(instPremium), 
-                            instPremMean = weighted.mean(instPremium, SALPOP))
+                  summarise(instPremMean = weighted.mean(instPremium, SALPOP))
 
 ##UKPRN matched with Degree Classs
 degreeSummary <- select(degreeClass, UKPRN, KISCOURSEID, DEGPOP, 
@@ -60,3 +60,9 @@ degreeSummary <- degreeSummary %>%
 
 degreeSummary[,-1] <- round(degreeSummary[,-1])
 
+instStats <- tariffMeans %>%
+  inner_join(instLocations, by="UKPRN") %>%
+  inner_join(salaryPremium, by="UKPRN") %>%
+  inner_join(degreeSummary, by="UKPRN")
+
+saveRDS(instStats, file="instStats.rda")
