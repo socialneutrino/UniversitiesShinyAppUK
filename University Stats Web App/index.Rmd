@@ -1,0 +1,110 @@
+---
+title       : WhichUni Web App
+author      : Alex Spiers
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## WhichUni: English and Welsh University Stats Web Application
+
+- WhichUni is a shiny web application that is an interactive visualisation of publicly available information
+from HESA (Higher Education Statistics Agency)
+
+- WhichUni allows users to view English and Welsh univerisities after filtering by the entry requirements of students (UCAS points)
+
+- Author: Alex Spiers
+
+---
+
+## WhichUni: Data Set
+
+```{r echo=FALSE}
+setwd("C:/Users/Alex/Google Drive/Personal/COURSERA/9.Developing Data Products/DevDataProdProject")
+instStats <- readRDS("instStats.rda")
+```
+
+- UNISTATS Dataset is a publicly available information set collected by the Higher Education Statistics Agency in the UK
+
+- The data set can be found on the [HESA website] (https://www.hesa.ac.uk/unistatsdata)
+
+- The data set includes the following variables:
+  - *Unversity Name*
+  - *tariffMean* this is the mean number of UCAS points (post-16 qualifications)
+  that students have on entry to their course at University.
+  - *instPremMean* this is a measure of the "Salary Premium" obtained by graduates from the
+  university. This is calculated as a percentage increase/decrease when compared to graduates
+  studying the same course nationally.
+  - *totalUpper* the percentage of students that have obtained a first or upper-second degree.
+  - *Location* the location of the campus.
+  
+---
+
+
+
+## WhichUni: Features - Bubble Map
+
+Users can choose to display the data as a ```googleVis``` package "Bubble"" Map 
+
+```{r echo=FALSE}
+library(googleVis)
+library(dplyr)
+setwd("C:/Users/Alex/Google Drive/Personal/COURSERA/9.Developing Data Products/DevDataProdProject")
+## Prepare data to be displayed
+instStats <- readRDS("instStats.rda")
+```
+
+```{r results = 'asis', echo=FALSE}
+options(gvis.plot.tag='chart')
+library(googleVis)
+Bubble <- gvisBubbleChart(instStats, idvar="NAME", 
+                          xvar="tariffMean", yvar="instPremMean",
+                          sizevar="totalFirst",
+                          options=list(
+                            width=1200,height=800,
+                            hAxis='{minValue:75, maxValue:125}'))
+plot(Bubble)
+```
+
+---
+
+## WhichUni: Features - Bubble Map
+
+Users can choose to display the data as a ```googleVis``` package "Bubble" Chart or "GeoMap"
+
+```{r echo=FALSE}
+library(googleVis)
+library(dplyr)
+setwd("C:/Users/Alex/Google Drive/Personal/COURSERA/9.Developing Data Products/DevDataProdProject")
+instStats <- readRDS("instStats.rda")
+## Prepare data to be displayed
+```
+
+```{r results = 'asis', message = F, echo = F}
+options(gvis.plot.tag='chart')
+library(googleVis)
+Bubble <- gvisBubbleChart(instStats, idvar="NAME", 
+                          xvar="tariffMean", yvar="instPremMean",
+                          sizevar="totalFirst",
+                          options=list(
+                            width=800,height=400,
+                            hAxis='{minValue:75, maxValue:125}'))
+plot(Bubble)
+```
+
+---
+
+## WhichUni: Intended User Base
+
+Intended users include:
+
+- Prospective students: can use the web app to inform their choices before applying to university
+
+- Employers and graduate recruiters: can use web app to identify key talent for their recruitment
+
+- University Marketing deparments: can use web app to benchmark their institutions against the competition and highlight unique aspects.
+

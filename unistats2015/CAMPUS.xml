@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<!--generic types-->
+	<!--define fields-->
+	<xs:element name="UKPRN">
+	<xs:simpleType>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="10000000"/>
+			<xs:maxInclusive value="99999999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	</xs:element>
+	<xs:element name="RECID">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="5"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="CAMPID">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="CAMPNAME">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="80"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>	
+	<xs:element name="COUNTRY">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="2"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="POSTCODE">
+	<xs:simpleType>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="8"/>
+			<xs:pattern value="[a-zA-Z0-9 ]*"/>
+		</xs:restriction>	
+	</xs:simpleType>
+	</xs:element>
+	<xs:element name="EASTING">
+	<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="000000"/>
+				<xs:maxInclusive value="700000"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="NORTHING">
+	<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="0000000"/>
+				<xs:maxInclusive value="1300000"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="XINSTID01">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="4"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<!--define structure of each row-->
+	<xs:element name="CAMPUSROW">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="UKPRN"/>
+				<xs:element ref="RECID"/>
+				<xs:element ref="CAMPID"/>
+				<xs:element ref="CAMPNAME"/>
+				<xs:element ref="COUNTRY"/>
+				<xs:element ref="POSTCODE"/>
+				<xs:element ref="EASTING"/>
+				<xs:element ref="NORTHING"/>
+				<xs:element ref="XINSTID01"/>
+				</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- define structure of file-->
+	<xs:element name="CAMPUSROWS">
+		<xs:annotation>
+			<xs:documentation>There can be one or more records of CAMPUSROW type</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CAMPUSROW" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CAMPUSREPORT">
+		<xs:annotation>
+			<xs:documentation>Root element for Data Supply CAMPUS Report</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CAMPUSROWS"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
