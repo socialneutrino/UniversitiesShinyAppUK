@@ -1,9 +1,10 @@
-uniMap <- gvisGeoMap(instStats, locationvar='LatLong', numvar='tariffMean',
+uniMap <- gvisGeoMap(instStats, locationvar='LatLong', 
+                     numvar='instPremMean',
                      hovervar='NAME',
                      options=list(showTip=TRUE, showLine=TRUE,
                                   enableScrollWheel=TRUE,
                                   mapType='hybrid', useMapTypeControl=TRUE,
-                                  width=1200,height=800,
+                                  width=1600,height=2000,
                                   region='GB', dataMode='Markers'))
 
 

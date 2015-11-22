@@ -19,17 +19,17 @@ shinyUI(fluidPage(
     column(6,
            selectInput("type_output",
                        "Plot Type:",
-                       c("GeoMap", "Bubble"))
+                       choices = c("Bubble", "GeoMap"))
     )
 ),
 
-  # Show a table summarizing the values entered
-  fluidRow(
-    column(12,
-    htmlOutput("bubble")
-  )),
+#   # Show a table summarizing the values entered
+#   fluidRow(
+#     column(12,
+#     htmlOutput("bubble")
+#   )),
 fluidRow(
   column(12,
-  htmlOutput("map")
+  htmlOutput("view")
   ))
 ))
