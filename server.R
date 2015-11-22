@@ -30,13 +30,26 @@ shinyServer(function(input, output) {
 #   })
 #   
 # Show the values using an HTML table
-  output$view <- renderGvis({
+  output$bubble <- renderGvis({
     gvisBubbleChart(uniFiltered(),
-                     idvar="NAME", 
-                     xvar="totalUpper", yvar="instPremMean",
-                     sizevar="tariffMean",
-                     options=list(
+                    idvar="NAME", 
+                    xvar="totalUpper", yvar="instPremMean",
+                    sizevar="tariffMean",
+                    options=list(
                        width=1200, height=800,
-                       hAxis='{minValue:75, maxValue:125}'))
+                       colorAxis="{colors: ['blue','yellow', 'red'], minValue: [150], maxValue: [600]}",
+                       hAxis="{title:'Percentage of Graduates Achieving First and Upper-Second Degrees'}",
+                       vAxis="{title:'Percentage Increase on Salary from Institution'}"))
+  })
+  output$map <- renderGvis({
+    gvisGeoMap(uniFiltered(), 
+               locationvar='LatLong', 
+               numvar='tariffMean',
+               hovervar='NAME',
+               options=list(showTip=TRUE, showLine=TRUE,
+                            enableScrollWheel=TRUE,
+                            mapType='hybrid', useMapTypeControl=TRUE,
+                            width=1200,height=800,
+                            region='GB', dataMode='Markers'))
   })
 })

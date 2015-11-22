@@ -3,7 +3,7 @@ uniMap <- gvisGeoMap(instStats, locationvar='LatLong', numvar='tariffMean',
                      options=list(showTip=TRUE, showLine=TRUE,
                                   enableScrollWheel=TRUE,
                                   mapType='hybrid', useMapTypeControl=TRUE,
-                                  width=1600,height=2000,
+                                  width=1200,height=800,
                                   region='GB', dataMode='Markers'))
 
 
